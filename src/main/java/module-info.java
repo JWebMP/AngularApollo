@@ -7,8 +7,6 @@ module com.jwebmp.angular.graphql {
     exports com.jwebmp.angular.graphql.annotations;
 
     requires transitive com.jwebmp.core.angular;
-    requires transitive com.jwebmp.core;
-    requires transitive com.guicedee.client;
 
     provides IGuiceScanModuleInclusions with AngularGraphQLScanModule;
 
