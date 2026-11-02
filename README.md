@@ -15,7 +15,9 @@
 
 Apollo GraphQL client generation for JWebMP. Annotate a Java class with `@NgGraphQL`, declare the GraphQL operation, and the compiler emits a fully typed, signal-based `@Injectable` Angular service backed by [`apollo-angular`](https://the-guild.dev/graphql/apollo-angular) — no handwritten TypeScript. One annotated class per operation (query, mutation, or subscription), mirroring the `@NgRestClient` pattern.
 
-Built on [apollo-angular 11](https://the-guild.dev/graphql/apollo-angular) · [Angular 21](https://angular.dev/) · [JWebMP Core](https://jwebmp.com/) · JPMS module `com.jwebmp.angular.graphql` · Java 25+
+Built on [apollo-angular 14](https://the-guild.dev/graphql/apollo-angular) · [Angular 22](https://angular.dev/) · [JWebMP Core](https://jwebmp.com/) · JPMS module `com.jwebmp.angular.graphql` · Java 25+
+
+For Angular 22 compatibility validation, run `mvn test` to export query, mutation and subscription fixtures, then run `node src/test/scripts/angular22-graphql.mjs <npm-workspace>`. The npm workspace must contain Angular 22, Apollo Angular 14, Apollo Client 4, GraphQL 16, RxJS 7 and TypeScript 6. The script compiles the generated service bodies with Angular AOT and exercises their signals with mocked Apollo results.
 
 ## 📦 Installation
 
@@ -35,8 +37,8 @@ The plugin declares the Apollo dependencies automatically via `@TsDependency`:
 ```json
 {
   "dependencies": {
-    "apollo-angular": "^11.0.0",
-    "@apollo/client": "^4.0.0",
+    "apollo-angular": "^14.2.0",
+    "@apollo/client": "^4.2.3",
     "graphql": "^16.9.0"
   }
 }

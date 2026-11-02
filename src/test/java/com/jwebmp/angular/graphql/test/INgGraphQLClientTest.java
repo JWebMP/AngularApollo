@@ -6,6 +6,8 @@ import com.jwebmp.angular.graphql.annotations.NgGraphQLVariable;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,6 +65,24 @@ class INgGraphQLClientTest
     }
 
     // ── Annotation accessor ────────────────────────────────────────────
+
+    @Test
+    void exportClientsForAngularCompilation() throws Exception
+    {
+        Path output = Path.of("target", "angular22-generated");
+        Files.createDirectories(output);
+        for (INgGraphQLClient<?> client : List.of(new UsersQuery(), new CreateOrderMutation(), new NotificationSubscription()))
+        {
+            String name = client.getClass().getSimpleName();
+            String source = "import { Injectable, inject, signal, WritableSignal, DestroyRef, OnDestroy } from '@angular/core';\n"
+                    + "import { Apollo, gql } from 'apollo-angular';\nimport { Subscription } from 'rxjs';\n"
+                    + String.join("\n", client.decorators()) + "\nexport class " + name + " implements OnDestroy {\n"
+                    + String.join("\n", client.fields()) + "\nconstructor() {\n"
+                    + String.join("\n", client.constructorBody()) + "\n}\n"
+                    + String.join("\n", client.methods()) + "\n}\n";
+            Files.writeString(output.resolve(name + ".ts"), source);
+        }
+    }
 
     @Test
     void testAnnotationAccessor()
@@ -195,6 +215,8 @@ class INgGraphQLClientTest
             assertTrue(joined.contains("reset(): void"), client.getClass().getSimpleName());
             assertTrue(joined.contains("ngOnDestroy(): void"), client.getClass().getSimpleName());
             assertTrue(joined.contains("handleResult(result: any): void"), client.getClass().getSimpleName());
+            assertTrue(joined.contains("this.error.set(result?.error);"), client.getClass().getSimpleName());
+            assertTrue(joined.contains("this.success.set(!result?.error);"), client.getClass().getSimpleName());
         }
     }
 

@@ -40,8 +40,8 @@ import static com.jwebmp.core.base.angular.client.services.interfaces.Annotation
 @NgImportReference(value = "Apollo, gql", reference = "apollo-angular")
 @NgImportReference(value = "Subscription", reference = "rxjs")
 
-@TsDependency(value = "apollo-angular", version = "^11.0.0")
-@TsDependency(value = "@apollo/client", version = "^4.0.0")
+@TsDependency(value = "apollo-angular", version = "^14.2.0")
+@TsDependency(value = "@apollo/client", version = "^4.2.3")
 @TsDependency(value = "graphql", version = "^16.9.0")
 public interface INgGraphQLClient<J extends INgGraphQLClient<J>> extends IComponent<J>
 {
@@ -341,12 +341,10 @@ public interface INgGraphQLClient<J extends INgGraphQLClient<J>> extends ICompon
     {
         StringBuilder sb = new StringBuilder();
         sb.append("private handleResult(result: any): void {\n");
-        sb.append("    if (result?.errors && result.errors.length) {\n");
-        sb.append("        this.error.set(result.errors);\n");
-        sb.append("    }\n");
+        sb.append("    this.error.set(result?.error);\n");
         sb.append("    this.data.set(result?.data as ").append(signalType).append(");\n");
         sb.append("    this.loading.set(!!result?.loading);\n");
-        sb.append("    this.success.set(!result?.errors);\n");
+        sb.append("    this.success.set(!result?.error);\n");
         sb.append("}");
         return sb.toString();
     }
